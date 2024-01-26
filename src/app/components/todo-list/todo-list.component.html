@@ -1,15 +1,14 @@
 <div class="todo-container">
   <h2>Todo List</h2>
   <form (submit)="onAddTodo()" class="todo-form">
-    <div>
-      <label>Enter your task</label>
-      <input
-        class="todo-input"
-        type="text"
-        [(ngModel)]="todoTitle"
-        placeholder="Enter your task"
-      />
-    </div>
+    <label>Enter your task</label>
+    <input
+      class="todo-input"
+      type="text"
+      name="todoTitle"
+      [(ngModel)]="todoTitle"
+      placeholder="Enter your task"
+    />
 
     <button type="submit">Add</button>
   </form>

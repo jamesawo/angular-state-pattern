@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { Todo } from '../../model/todo.model';
+import {
+  addTodoAction,
+  toggleTodoAction,
+  removeTodoAction,
+} from '../../state/todo.action';
 
 @Component({
   selector: 'app-todo-list',
@@ -11,17 +17,34 @@ import { Todo } from '../../model/todo.model';
 })
 export class TodoListComponent {
   todos$?: Todo[];
-  todoTitle?: string;
+  todoTitle: string = '';
+
+  constructor(private store: Store<{ todos: { todos: Todo[] } }>) {
+    store.select('todos').subscribe((todoState) => {
+      this.todos$ = todoState.todos;
+    });
+  }
 
   onRemoveTodo(id: number) {
-    throw new Error('Method not implemented.');
+    this.store.dispatch(removeTodoAction({ id }));
   }
 
   onToggleTodo(id: number) {
-    throw new Error('Method not implemented.');
+    this.store.dispatch(toggleTodoAction({ id }));
   }
 
   onAddTodo() {
-    throw new Error('Method not implemented.');
+    if (this.todoTitle?.trim() === '') {
+      return;
+    }
+
+    const todo: Todo = {
+      id: Date.now(),
+      completed: false,
+      title: this.todoTitle,
+    };
+
+    this.store.dispatch(addTodoAction({ todo }));
+    this.todoTitle = '';
   }
 }
